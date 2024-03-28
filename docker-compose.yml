@@ -1,27 +1,10 @@
-version: '3'
 services:
-  app:
-    image: node:latest
-    container_name: app_main
-    restart: always
-    command: sh -c "yarn install && yarn start"
+  web: 
+    build:
+      context: app
+      target: builder
+    # flask requires SIGINT to stop gracefully
+    # (default stop signal from Compose is SIGTERM)
+    stop_signal: SIGINT
     ports:
-      - 8000:8000
-    working_dir: /app
-    volumes:
-      - ./:/app
-    environment:
-      MYSQL_HOST: localhost
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_DB: test
-  mongo:
-    image: mongo
-    container_name: app_mongo
-    restart: always
-    ports:
-      - 27017:27017
-    volumes:
-      - ~/mongo:/data/db
-volumes:
-  mongodb:
+      - '8000:8000'
